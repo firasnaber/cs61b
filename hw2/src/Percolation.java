@@ -5,6 +5,7 @@ public class Percolation {
     // TODO: Add any necessary instance variables.
     int N;
     boolean[][] grid;
+    int numberOfOpenSites = 0;
     WeightedQuickUnionUF uf;
 
     public Percolation(int N) {
@@ -27,8 +28,7 @@ public class Percolation {
     }
 
     public int numberOfOpenSites() {
-        // TODO: Fill in this method.
-        return 0;
+        return numberOfOpenSites;
     }
 
     public boolean percolates() {
