@@ -3,9 +3,14 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
     // TODO: Add any necessary instance variables.
+    int N;
+    boolean[][] grid;
+    WeightedQuickUnionUF uf;
 
     public Percolation(int N) {
-        // TODO: Fill in this constructor.
+        this.N = N;
+        grid = new boolean[N][N];
+        uf = new WeightedQuickUnionUF(N);
     }
 
     public void open(int row, int col) {
@@ -13,8 +18,7 @@ public class Percolation {
     }
 
     public boolean isOpen(int row, int col) {
-        // TODO: Fill in this method.
-        return false;
+        return grid[row][col];
     }
 
     public boolean isFull(int row, int col) {
