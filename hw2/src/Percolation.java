@@ -2,13 +2,15 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 
 public class Percolation {
-    // TODO: Add any necessary instance variables.
     int N;
     boolean[][] grid;
     int numberOfOpenSites = 0;
     WeightedQuickUnionUF uf;
 
     public Percolation(int N) {
+        if (N <= 0) {
+            throw new IllegalArgumentException("Class should be constructed with a value greater than 0");
+        }
         this.N = N;
         grid = new boolean[N][N];
         uf = new WeightedQuickUnionUF(N);
