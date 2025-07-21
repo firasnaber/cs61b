@@ -19,11 +19,14 @@ public class Percolation {
     }
 
     public boolean isOpen(int row, int col) {
+        validateIndices(row, col);
         return grid[row][col];
     }
 
     public boolean isFull(int row, int col) {
         // TODO: Fill in this method.
+        validateIndices(row, col);
+
         return false;
     }
 
@@ -38,5 +41,13 @@ public class Percolation {
 
     // TODO: Add any useful helper methods (we highly recommend this!).
     // TODO: Remove all TODO comments before submitting.
+    private void validateIndices(int row, int col) {
+        if (row < 0 || row >= N || col < 0 || col >= N) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+    }
 
+    private int rcToIndex(int row, int col) {
+        return row * N + col;
+    }
 }
