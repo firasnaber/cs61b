@@ -6,6 +6,9 @@ public class Percolation {
     boolean[][] grid;
     int numberOfOpenSites = 0;
     WeightedQuickUnionUF uf;
+    WeightedQuickUnionUF ufFull; // Used to prevent backwash in isFull
+    int virtualTop;
+    int virtualBottom;
 
     public Percolation(int N) {
         if (N <= 0) {
@@ -13,7 +16,10 @@ public class Percolation {
         }
         this.N = N;
         grid = new boolean[N][N];
-        uf = new WeightedQuickUnionUF(N * N);
+        uf = new WeightedQuickUnionUF(N * N + 2);
+        ufFull = new WeightedQuickUnionUF(N * N + 1);
+        virtualTop = N * N;
+        virtualBottom = N * N + 1;
     }
 
     public void open(int row, int col) {
@@ -22,21 +28,32 @@ public class Percolation {
         numberOfOpenSites++;
 
         int p = rcToIndex(row, col);
+
+        if (row == 0) {
+            uf.union(p, virtualTop);
+            ufFull.union(p, virtualTop);
+        }
+        if (row == N - 1) uf.union(p, virtualBottom);
+
         if (row > 0 && isOpen(row - 1, col)) {
             int q = rcToIndex(row - 1, col); // top
             uf.union(p, q);
+            ufFull.union(p, q);
         }
         if (row < N - 1 && isOpen(row + 1, col)) {
             int q = rcToIndex(row + 1, col); // bottom
             uf.union(p, q);
+            ufFull.union(p, q);
         }
         if (col > 0 && isOpen(row, col - 1)) {
             int q = rcToIndex(row, col - 1); // left
             uf.union(p, q);
+            ufFull.union(p, q);
         }
         if (col < N - 1 && isOpen(row, col + 1)) {
             int q = rcToIndex(row, col + 1); // right
             uf.union(p, q);
+            ufFull.union(p, q);
         }
     }
 
@@ -46,10 +63,9 @@ public class Percolation {
     }
 
     public boolean isFull(int row, int col) {
-        // TODO: Fill in this method.
         validateIndices(row, col);
-
-        return false;
+        int p = rcToIndex(row, col);
+        return ufFull.connected(virtualTop, p);
     }
 
     public int numberOfOpenSites() {
@@ -57,12 +73,8 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        // TODO: Fill in this method.
-        return false;
+        return uf.connected(virtualTop, virtualBottom);
     }
-
-    // TODO: Add any useful helper methods (we highly recommend this!).
-    // TODO: Remove all TODO comments before submitting.
     private void validateIndices(int row, int col) {
         if (row < 0 || row >= N || col < 0 || col >= N) {
             throw new IndexOutOfBoundsException("Index out of bounds");
