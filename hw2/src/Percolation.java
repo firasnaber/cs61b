@@ -13,11 +13,31 @@ public class Percolation {
         }
         this.N = N;
         grid = new boolean[N][N];
-        uf = new WeightedQuickUnionUF(N);
+        uf = new WeightedQuickUnionUF(N * N);
     }
 
     public void open(int row, int col) {
-        // TODO: Fill in this method.
+        validateIndices(row, col);
+        grid[row][col] = true;
+        numberOfOpenSites++;
+
+        int p = rcToIndex(row, col);
+        if (row > 0 && isOpen(row - 1, col)) {
+            int q = rcToIndex(row - 1, col); // top
+            uf.union(p, q);
+        }
+        if (row < N - 1 && isOpen(row + 1, col)) {
+            int q = rcToIndex(row + 1, col); // bottom
+            uf.union(p, q);
+        }
+        if (col > 0 && isOpen(row, col - 1)) {
+            int q = rcToIndex(row, col - 1); // left
+            uf.union(p, q);
+        }
+        if (col < N - 1 && isOpen(row, col + 1)) {
+            int q = rcToIndex(row, col + 1); // right
+            uf.union(p, q);
+        }
     }
 
     public boolean isOpen(int row, int col) {
